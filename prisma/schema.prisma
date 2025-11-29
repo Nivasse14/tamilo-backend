@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Table principale des utilisateurs
+model User {
+  id                  String    @id @default(uuid())
+  name                String
+  age                 Int?
+  gender              String?   // "F", "M", "NB", etc.
+  city                String?
+  country             String?
+  
+  // Valeurs et critères (stockés en JSON)
+  values              Json?     // Ex: ["respect", "famille", "ambition"]
+  nonNegotiables      Json?     // Ex: ["respect", "loyauté", "stabilité émotionnelle"]
+  emotionalNeeds      Json?     // Ex: ["sécurité", "transparence"]
+  redFlags            Json?     // Ex: ["violence verbale", "égoïsme"]
+  
+  // Informations relationnelles
+  relationshipGoal    String?   // Ex: "relation sérieuse", "mariage"
+  cultureOpenness     Json?     // Ex: ["tamoul", "français"]
+  familySituation     String?   // Ex: "enfants", "sans_enfant"
+  communicationStyle  String?   // Ex: "directe_mais_douce"
+  
+  // Profil brut (questionnaire complet)
+  rawProfile          Json?
+  
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  
+  // Relations
+  agentSummary        AgentSummary?
+  matchesAsUserA      MatchLog[] @relation("UserAMatches")
+  matchesAsUserB      MatchLog[] @relation("UserBMatches")
+  
+  @@map("users")
+}
+
+// Table pour les résumés d'agents IA (Étape 2)
+model AgentSummary {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Résumé généré par l'IA au format JSON structuré
+  summary   Json     // Contient: core_values, non_negotiables, emotional_needs, etc.
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("agent_summaries")
+}
+
+// Table de logs des matchings (pour historique et analyse)
+model MatchLog {
+  id        String   @id @default(uuid())
+  
+  userAId   String
+  userBId   String
+  userA     User     @relation("UserAMatches", fields: [userAId], references: [id], onDelete: Cascade)
+  userB     User     @relation("UserBMatches", fields: [userBId], references: [id], onDelete: Cascade)
+  
+  mode      String   // "MVP" ou "AGENT_V2"
+  
+  // Résultat complet du matching (verdict IA)
+  result    Json     // Contient: verdict, résumé, points forts/faibles, score
+  
+  createdAt DateTime @default(now())
+  
+  @@map("match_logs")
+  @@index([userAId])
+  @@index([userBId])
+  @@index([createdAt])
+}

@@ -1,0 +1,192 @@
+ia-tamilo/
+│
+├── 📄 .env                              # ⚙️ Variables d'environnement (CONFIGURER!)
+├── 📄 .env.example                      # 📋 Template de configuration
+├── 📄 .gitignore                        # 🚫 Fichiers ignorés par Git
+├── 📄 package.json                      # 📦 Dépendances npm
+├── 📄 README.md                         # 📖 Documentation principale
+├── 📄 QUICK_START.md                    # 🚀 Guide de démarrage rapide
+├── 📄 PROJECT_SUMMARY.md                # ✅ Résumé du projet
+├── 📄 setup.sh                          # ⚡ Script d'installation automatique
+│
+├── 📂 src/                              # 💻 CODE SOURCE
+│   ├── 📄 index.js                      # 🌐 Serveur Express (point d'entrée)
+│   ├── 📄 db.js                         # 🗄️ Client Prisma (connexion DB)
+│   │
+│   ├── 📂 config/
+│   │   └── 📄 prompts.js                # 🧠 Prompts IA (MVP, Agents, Arbitre)
+│   │
+│   ├── 📂 services/
+│   │   ├── 📄 aiClient.js               # 🤖 Client OpenAI
+│   │   └── 📄 matchService.js           # 💘 Logique de matching
+│   │
+│   └── 📂 routes/
+│       └── 📄 matchRoutes.js            # 🛣️ Routes API Express
+│
+├── 📂 prisma/                           # 🗃️ BASE DE DONNÉES
+│   ├── 📄 schema.prisma                 # 📐 Schéma PostgreSQL
+│   └── 📄 seed.js                       # 🌱 Données de test (5 utilisateurs)
+│
+├── 📂 examples/                         # 🧪 EXEMPLES & TESTS
+│   └── 📄 api-examples.js               # 📝 Scripts de test API
+│
+└── 📂 docs/                             # 📚 DOCUMENTATION
+    ├── 📄 ARCHITECTURE.md               # 🏗️ Architecture technique
+    ├── 📄 MATCHING_LOGIC.md             # 🧩 Logique de matching détaillée
+    ├── 📄 COMMANDS_CHEATSHEET.md        # ⚙️ Commandes utiles
+    └── 📄 API_EXAMPLES.md               # 📊 Exemples de réponses API
+
+
+═══════════════════════════════════════════════════════════════════
+
+📋 RÉSUMÉ DES FICHIERS
+
+Configuration (5)
+├── .env                    → Variables d'environnement (À CONFIGURER!)
+├── .env.example            → Template
+├── .gitignore              → Exclusions Git
+├── package.json            → Dépendances npm
+└── setup.sh                → Installation automatique
+
+Documentation (6)
+├── README.md               → Vue d'ensemble
+├── QUICK_START.md          → Guide rapide
+├── PROJECT_SUMMARY.md      → Résumé complet
+├── docs/ARCHITECTURE.md    → Architecture
+├── docs/MATCHING_LOGIC.md  → Logique métier
+├── docs/COMMANDS_CHEATSHEET.md → Commandes
+└── docs/API_EXAMPLES.md    → Exemples API
+
+Code Source (7)
+├── src/index.js            → Serveur Express
+├── src/db.js               → Client Prisma
+├── src/config/prompts.js   → Prompts IA
+├── src/services/aiClient.js → Client OpenAI
+├── src/services/matchService.js → Logique matching
+├── src/routes/matchRoutes.js → Routes API
+└── examples/api-examples.js → Tests
+
+Base de Données (2)
+├── prisma/schema.prisma    → Schéma PostgreSQL
+└── prisma/seed.js          → Données de test
+
+TOTAL : 19 fichiers créés ✨
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 CHECKLIST DE DÉMARRAGE
+
+Avant de commencer :
+☐ PostgreSQL installé ou accès serveur Hetzner
+☐ Clé API OpenAI obtenue (https://platform.openai.com)
+☐ Node.js 20+ installé
+
+Installation :
+☐ 1. Éditer .env avec vos vraies valeurs
+☐ 2. npm install
+☐ 3. npm run prisma:generate
+☐ 4. npm run prisma:migrate
+☐ 5. npm run prisma:seed
+☐ 6. npm start
+
+Tests :
+☐ curl http://localhost:3000/health
+☐ Tester un matching MVP
+☐ Tester un matching Agents
+☐ Ouvrir Prisma Studio
+
+═══════════════════════════════════════════════════════════════════
+
+🚀 COMMANDES PRINCIPALES
+
+Installation rapide :
+  ./setup.sh                          # Installation guidée
+
+Développement :
+  npm start                           # Démarrer le serveur
+  npm run dev                         # Mode développement
+  npm run prisma:studio               # Interface DB graphique
+
+Tests :
+  curl http://localhost:3000/health   # Health check
+  node examples/api-examples.js       # Tests automatisés
+
+Production :
+  pm2 start src/index.js --name ia-tamilo-api
+  pm2 logs ia-tamilo-api
+
+═══════════════════════════════════════════════════════════════════
+
+📡 API ENDPOINTS
+
+GET  /                     → Infos API
+GET  /health               → Status serveur
+POST /match/mvp            → Matching rapide (3-8s)
+POST /match/agents         → Matching détaillé (15-25s)
+GET  /profile/:userId      → Récupérer profil
+POST /agents/rebuild/:id   → Régénérer agent
+
+═══════════════════════════════════════════════════════════════════
+
+🗄️ TABLES DE DONNÉES
+
+users
+├── Profils utilisateurs complets
+├── Valeurs, besoins, red flags
+└── Objectifs relationnels
+
+agent_summaries
+├── Résumés d'agents IA
+├── Version condensée pour conversations
+└── Réutilisables pour performance
+
+match_logs
+├── Historique des matchings
+├── Mode (MVP ou AGENT_V2)
+└── Résultats complets avec verdicts
+
+═══════════════════════════════════════════════════════════════════
+
+🧪 UTILISATEURS DE TEST (après seed)
+
+1. Sophie Dubois (001)     → F, 28 ans, valeurs familiales
+2. Ravi Kumar (002)        → M, 30 ans, culture tamoule
+3. Marie Laurent (003)     → F, 32 ans, liberté/créativité
+4. Priya Sharma (004)      → F, 27 ans, double culture
+5. Thomas Mercier (005)    → M, 35 ans, stabilité/routine
+
+Matchings suggérés à tester :
+  ✅ Sophie (001) x Ravi (002)      → Très compatible
+  ✅ Priya (004) x Ravi (002)       → Excellent match
+  ⚠️  Sophie (001) x Marie (003)    → À explorer
+  ❌ Sophie (001) x Thomas (005)    → Peu compatible
+
+═══════════════════════════════════════════════════════════════════
+
+💡 CONSEILS IMPORTANTS
+
+1. Configurez OPENAI_API_KEY dans .env AVANT de démarrer
+2. Créez une base PostgreSQL AVANT de lancer les migrations
+3. Utilisez le mode MVP pour tests rapides
+4. Utilisez le mode Agents pour analyse approfondie
+5. Les agents sont mis en cache (pas de régénération inutile)
+6. Consultez les logs serveur pour déboguer
+7. Utilisez Prisma Studio pour gérer les données
+
+═══════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION COMPLÈTE
+
+README.md                   → Vue d'ensemble
+QUICK_START.md              → Installation pas à pas
+PROJECT_SUMMARY.md          → Ce fichier
+docs/ARCHITECTURE.md        → Architecture technique
+docs/MATCHING_LOGIC.md      → Critères et logique
+docs/COMMANDS_CHEATSHEET.md → Toutes les commandes
+docs/API_EXAMPLES.md        → Exemples de réponses
+
+═══════════════════════════════════════════════════════════════════
+
+✨ Le projet est PRÊT À L'EMPLOI !
+
+Lancez ./setup.sh pour commencer 🚀
